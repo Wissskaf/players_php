@@ -1,6 +1,6 @@
 <?php
 // Start the session
-session_start();
+
 
 // Include the classes
 include_once 'classes.php';
