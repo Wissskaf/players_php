@@ -1,11 +1,10 @@
 <?php
-// Include the classes
+
 include_once 'classes.php';
 
-// Start the session
-session_start();
+// session_start();
 
-// Function to get team by name
+
 function getTeamByName($teamName) {
     foreach ($_SESSION['players'] as $team) {
         if ($team->getName() === $teamName) {
@@ -15,7 +14,7 @@ function getTeamByName($teamName) {
     return null;
 }
 
-// Function to remove a player from a team by ID
+
 function removePlayerFromTeam($teamName, $playerId) {
     $team = getTeamByName($teamName);
     if ($team) {
@@ -23,13 +22,43 @@ function removePlayerFromTeam($teamName, $playerId) {
     }
 }
 
-// Function to delete a player by ID
-function deletePlayerById($playerId) {
+ function deletePlayerById($playerId) {
+    
     foreach ($_SESSION['players'] as $key => $player) {
+    
         if ($player instanceof Player && $player->getId() == $playerId) {
+            
+            $teamName = $player->getTeam();
+    
+         
+            $team = getTeamByName($teamName);
+            if ($team) {
+                $team->removePlayerById($playerId);
+            }
+    
+            
             unset($_SESSION['players'][$key]);
+    
             break;
         }
+    }
+}
+
+
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // on delete
+    if (isset($_POST['delete_player'])) {
+        $playerIdToDelete = $_POST['player_id'];
+        deletePlayerById($playerIdToDelete);
+    }
+
+    // if remove is presses
+    if (isset($_POST['remove_from_team'])) {
+        $playerIdToRemove = $_POST['player_id'];
+        $teamNameToRemoveFrom = $_POST['team_name'];
+        removePlayerFromTeam($teamNameToRemoveFrom, $playerIdToRemove);
     }
 }
 ?>
@@ -75,8 +104,6 @@ function deletePlayerById($playerId) {
 
     <?php
     
-    
-    // Display players information
     echo "<table>";
     echo "<tr><th>ID</th><th>Name</th><th>Age</th><th>Team</th><th>Actions</th></tr>";
     foreach ($_SESSION['players'] as $player) {
@@ -87,16 +114,28 @@ function deletePlayerById($playerId) {
             echo "<td>{$player->getAge()}</td>";
             echo "<td>{$player->getTeam()}</td>";
             echo "<td class='action-buttons'>";
-            echo "<span class='action-button' onclick=\"removePlayer('{$player->getTeam()}', '{$player->getId()}')\">Remove from Team</span>";
-            echo "<span class='action-button' onclick=\"deletePlayer('{$player->getId()}')\">Delete</span>";
+
+            
+            echo "<form method='post' action='deletePlayer.php' style='display: inline; margin-right: 5px;'>";
+            echo "<input type='hidden' name='player_id' value='{$player->getId()}'>";
+            echo "<button type='submit' name='delete_player'>Delete</button>";
+            echo "</form>";
+
+            // Form to remove player from team
+          // Form to remove player from team
+        //   echo "<form method='post' action='removePlayerFromTeam.php' style='display: inline;'>";
+        //   echo "<input type='hidden' name='player_id' value='{$player->getId()}'>";
+        //   echo "<input type='hidden' name='team_name' value='{$player->getTeam()}'>";
+        //   echo "<button type='submit' name='remove_from_team'>Remove from Team</button>";
+        //   echo "</form>";
+
+
             echo "</td>";
             echo "</tr>";
         }
     }
     echo "</table>";
     ?>
-
- 
 
 </body>
 </html>

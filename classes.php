@@ -7,6 +7,7 @@ class Player {
     private $age;
 
     private $teamp;
+    private $playersOfTeam = array();
 
 
     // dont use team constructor when creating new player
@@ -40,6 +41,43 @@ class Player {
     //to set team in assign.php
     public function setTeam($teamName) {
          $this->teamp = $teamName;
+    }
+    public function setPlayers($players) {
+        $this->playersOfTeam = $players;
+    }
+
+    public function removePlayer($playerKey) {
+        if (isset($this->playersOfTeam[$playerKey])) {
+            unset($this->playersOfTeam[$playerKey]);
+        }
+    }
+    
+    
+    public function removePlayerById($playerId) {
+        $index = array_search($playerId, array_column($this->playersOfTeam, 'id'));
+
+        if ($index !== false) {
+            unset($this->playersOfTeam[$index]);
+        }
+    }
+
+    function deletePlayerById($playerId) {
+       
+        foreach ($_SESSION['players'] as $key => $player) {
+            
+            if ($player instanceof Player && $player->getId() == $playerId) {
+              
+                unset($_SESSION['players'][$key]);
+    
+                
+                $teamName = $player->getTeam();
+    
+                
+                removePlayerFromTeam($teamName, $playerId);
+    
+                break;
+            }
+        }
     }
     
     
@@ -87,12 +125,37 @@ public function getNbOfPlayers () {
 public function addPlayer( $player) {
     $this->playersOfTeam[] = $player;
 }
-// public function removePlayer( $player ) {
-//     $this->playersOfTeam->playersOfTeam.unset($player);
-// }
+
+
 
 public function getPlayers() {
     return $this->playersOfTeam;
 }
+public function setPlayers($players) {
+    $this->playersOfTeam = $players;
+}
+
+
+// Inside the Team class
+public function removePlayerById($playerId) {
+    foreach ($this->playersOfTeam as $key => $player) {
+        if ($player instanceof Player && $player->getId() == $playerId) {
+            // Remove the player from the session
+            removePlayerFromSession($playerId);
+
+            // Remove the player from the team
+            unset($this->playersOfTeam[$key]);
+            break;
+        }
+    }
+}
+}
+function removePlayerFromSession($playerId) {
+    foreach ($_SESSION['players'] as $key => $player) {
+        if ($player instanceof Player && $player->getId() == $playerId) {
+            unset($_SESSION['players'][$key]);
+            break;
+        }
+    }
 }
 ?>

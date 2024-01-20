@@ -4,26 +4,15 @@
 include_once 'classes.php';
 
 
-// Assume you have a Player and Team class defined similarly to your previous code
-
-// Check if there are teams and players in the session
-// if (!isset($_SESSION['teams'])) {
-//     $_SESSION['teams'] = [];
-// }
-
 if (!isset($_SESSION['players'])) {
     $_SESSION['players'] = [];
 }
 
-// Check if the form is submitted
-// Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Handle form submission for player assignment to a team
     if (isset($_POST['assign_team']) && isset($_POST['assigned_players'])) {
         $teamName = $_POST['assign_team'];
         $assignedPlayers = $_POST['assigned_players'];
 
-        // Find the selected team
         $selectedTeam = null;
         foreach ($_SESSION['players'] as $team) {
             if ($team->getName() === $teamName) {
@@ -35,10 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Assign players to the selected team
         if ($selectedTeam) {
             foreach ($assignedPlayers as $playerId) {
-                // Find the selected player
+               
                 foreach ($_SESSION['players'] as $player) {
                     if ($player instanceof Player && $player->getId() == $playerId) {
-                        // Assign player to the team
+                       
                         $selectedTeam->addPlayer($player);
                         $player->setTeam($teamName);
                         break;
@@ -53,10 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-
-
-    
-
     <title>Assign Players to Teams</title>
 
 <body>
@@ -66,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label for="assign_team">Select Team:</label>
         <select id="assign_team" name="assign_team" required>
             <?php
-            // Display available teams in the combo box
+            //  combo box
             foreach ($_SESSION['players'] as $team) {
            if  ($team instanceof Team) {
                 echo "<option value='{$team->getName()}'>{$team->getName()}</option>";
@@ -79,10 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <label>Select Players to Assign:</label>
 <?php
-// Display all players with checkboxes
+// checkboxes
 foreach ($_SESSION['players'] as $player) {
 
-    // Check if the current item is an instance of the Player class
     if ($player instanceof Player) {
         echo "<input type='checkbox' name='assigned_players[]' value='{$player->getId()}'>{$player->getId()} &nbsp; {$player->getName()}<br>";
     }

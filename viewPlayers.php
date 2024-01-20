@@ -5,7 +5,6 @@ include_once 'classes.php';
 // // Start the session
 // session_start();
 
-// Function to get team by name
 function getTeamByName($teamName) {
     foreach ($_SESSION['players'] as $team) {
         if ($team->getName() === $teamName) {

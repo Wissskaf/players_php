@@ -2,6 +2,7 @@
 <title>Main</title>
 
 <body>
+    <!-- <h1> Wissam Skaf</h1> -->
     <div class="nav-container">
         <a href="player.php">Enter a player</a>
         <a href="team.php">Enter a Team</a>
@@ -9,7 +10,9 @@
         <a href="viewPlayers.php">All Players</a>
         <a href="viewTeams.php">View Team's Players</a>
         <a href="deletePlayer.php">Delete Player</a>
-        <a href="displayPlayer.php">Display all players in a team</a>
+        <a href="allteams.php">All Teams</a>
+
+        <!-- <a href="displayPlayer.php">Display all players in a team</a> -->
     </div>
 
 </body>

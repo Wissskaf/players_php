@@ -15,13 +15,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "<tr><th>Name</th><th>Location</th><th>Number of Players</th></tr>";
             echo "<tr><td>{$selectedTeam->getName()}</td><td>{$selectedTeam->getLocation()}</td><td>{$selectedTeam->getNbOfPlayers()}</td></tr>";
             echo "</table>";
-
+        
             echo "<h2>Players</h2>";
             echo "<table>";
-            echo "<tr><th>ID</th><th>Name</th><th>Age</th></tr>";
+            echo "<tr><th>ID</th><th>Name</th><th>Age</th><th>Action</th></tr>";
+        
             foreach ($selectedTeam->getPlayers() as $player) {
-                echo "<tr><td>{$player->getId()}</td><td>{$player->getName()}</td><td>{$player->getAge()}</td></tr>";
+                echo "<tr>";
+                echo "<td>{$player->getId()}</td>";
+                echo "<td>{$player->getName()}</td>";
+                echo "<td>{$player->getAge()}</td>";
+                echo "<td>";
+        
+                // Add the delete form for each player
+                echo "<form method='post' action='deletebutton.php' style='display: inline; margin-right: 5px;'>";
+                echo "<input type='hidden' name='player_id' value='{$player->getId()}'>";
+                echo "<button type='submit' name='delete_player'>Delete</button>";
+                echo "</form>";
+        
+                echo "</td>";
+                echo "</tr>";
             }
+        
             echo "</table>";
         } else {
             echo "<p>Team not found</p>";
@@ -89,53 +104,3 @@ function getTeamByName($teamName) {
             background-color: #f2f2f2;
         }
     </style>
-<!-- <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        form {
-            text-align: center;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        label {
-            display: block;
-            margin: 10px 0;
-        }
-
-        select {
-            margin-bottom: 10px;
-            text-align: center;
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-        }
-
-        button {
-            background-color: #4caf50;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-    </style> -->
